@@ -1,0 +1,42 @@
+<h3>{$resultitem->title}</h3>
+<div class="sc_tp">
+    <div class="fl">
+        <a href="#" class="btn" onclick="window.close();return false">{$lang->cmd_close}</a>
+    </div>
+    <p class="qcnt">
+        총 <span id="total_q_count">{$resultitem->correct_count+$resultitem->wrong_count}</span> 문항 중 {$resultitem->correct_count}개 정답
+    </p>
+    <p class="fr">
+        <label for="member_name">이 름 : <input type="text" value="{$member_info->nick_name}" readonly="readonly" class="underInput" /></label>
+        <label for="member_score">점 수 : <input type="text" value="{($resultitem->result_type>=1)? (int)$resultitem->score : $lang->exam_score_secert; }" readonly="readonly" style="color:red;font-weight:bold;text-align:center" class="underInput" /></label>
+    </p>
+</div>
+<div id="questions" class="questions">
+    <div loop="$resultitem->answer=>$no,$qitem" class="qitem">
+        {@ $chk = ($qitem->get('my_answer')==$qitem->getAnswer())? "check_o" : "check_x"; }
+        <div class="qtitle">
+            <div class="txt">
+                <div class="q_number {$chk}"></div>
+                <span>{$no}</span>. {$qitem->getTitle()}
+                <span cond="!$qitem->getQType()" style="color:blue">[{$lang->q_answer}: {$qitem->getAnswer()}]</span>
+            </div>
+        </div>
+        <fieldset cond="$qitem->isDescription()=='Y' && $qitem->getDescription()" class="description">
+            <legend cond="$qitem->getDescriptionTitle()">{$qitem->getDescriptionTitle()}</legend>
+            {$qitem->getDescription()}
+        </fieldset>
+        <p cond="$qitem->getQType()" class="qanswer">
+            <label for="my_answer{$no}">제　출: <input type="text" id="my_answer{$no}" value="{$qitem->get('my_answer')}" readonly="readonly" class="underInput" /></label>
+            <label for="answer{$no}">정　답: <input type="text" id="answer{$no}" value="{$qitem->getAnswer()}" readonly="readonly" class="underInput" /></label>
+        </p>
+        <ul cond="!$qitem->getQType()" class="qanswer_list">
+        <input type="hidden" name="answer{$no}" id="answer{$no}" value="" />
+        <li loop="$lang->numIconList=>$i,$icon" cond="$qitem->getAnswer($i)">
+             <div class="txt">
+                {$icon} {$qitem->getAnswer($i)}
+            </div>
+            <div cond="$qitem->get('my_answer')==$i" class="marking"></div>
+        </li>
+        </ul>
+    </div>
+</div>

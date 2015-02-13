@@ -1,0 +1,23 @@
+<h3>{$examitem->getTitle()}</h3>
+<div class="sc_tp">
+    <div class="fl">
+        <a cond="$examitem->isGranted() && $mode!='edit'" href="{getUrl('mode','edit')}" class="btn">{$lang->cmd_change_editmode}</a>
+        <block cond="$examitem->isGranted() && $mode=='edit'">
+        <a href="#" data-value="{$examitem->document_srl}" class="btn question_insert">{$lang->cmd_question_write}</a>
+        <a href="{getUrl('mode','')}" class="btn">{$lang->cmd_back}</a>
+        </block>
+    </div>
+    <p class="qcnt">
+        총 <span id="total_q_count">{$examitem->getQuestionCount()}</span> 문항
+    </p>
+    <p class="fr">
+        <label for="member_name">이 름 : <input type="text" name="member_name" id="member_name" value="{$logged_info->nick_name}" class="underInput" /></label>
+        <label for="member_score">점 수 : <input type="text" name="member_score" id="member_score" value="" readonly="readonly" class="underInput" /></label>
+    </p>
+</div>
+<div id="examTimer" class="cd" cond="$examitem->isTime() && $examitem->get('exam_time')" data-value="{$examitem->get('exam_time')}"></div>
+<div id="questions" class="questions">
+    <include target="_paper_message.html" cond="!$mode" />
+    <include target="_paper_questions.html" cond="$mode=='join'" />
+    <include target="_paper_edit.html" cond="$mode=='edit'" />
+</div>
